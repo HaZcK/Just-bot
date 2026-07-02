@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Just Bot v1.0 - Web Dashboard</title>
+    <!-- Font Awesome Icon Library (Untuk estetika ikon menu) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="justbot-app">
+
+    <!-- 1. HEADER UTAMA -->
+    <header class="app-header">
+        <div class="logo-area">
+            <span class="status-indicator online"></span>
+            <h1 class="brand-title">JUST BOT <span class="version-badge">v1.0</span></h1>
+        </div>
+        
+        <!-- Metadata Arsitek & Tombol Pengaturan -->
+        <div class="header-controls">
+            <div class="architect-badge">
+                <i class="fa-solid fa-code-branch"></i>
+                <span class="architect-name">Ahmad Al-Khafidz Badali</span>
+            </div>
+            <button id="btnToggleSettings" class="icon-button" title="Grok API Configuration">
+                <i class="fa-solid fa-gears"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- 2. PANEL KONFIGURASI API (Default Tersembunyi) -->
+    <section id="apiConfigPanel" class="config-panel">
+        <div class="config-wrapper">
+            <h3 class="panel-title"><i class="fa-solid fa-key"></i> X.AI Grok API Configuration</h3>
+            <p class="panel-desc">Gunakan API Key Grok Anda untuk menghidupkan kecerdasan buatan Just Bot v1.0.</p>
+            
+            <div class="input-group">
+                <input type="password" id="grokApiKeyInput" placeholder="xai-xxxxxxxxxxxxxxxxxxxxxxxx">
+                <button id="btnSaveApi" class="action-button">Simpan Key</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. AREA UTAMA (TAMPILAN TERBELAH: SIDEBAR & CHAT) -->
+    <main class="main-workspace">
+        
+        <!-- SIDEBAR: STATISTIK & MODUL STATUS (Untuk memantau bot) -->
+        <aside class="sidebar-info">
+            <!-- Profil Bot & Sertifikat Lampiran -->
+            <div class="sidebar-section profile-card">
+                <div class="bot-avatar">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <h4 class="profile-name">Just Bot AI</h4>
+                <p class="profile-status">Kolaborasi ChatGPT & Gemini</p>
+                <div class="certificate-anchor">
+                    <i class="fa-solid fa-award"></i> Lihat Sertifikat Kolaborasi
+                </div>
+            </div>
+
+            <!-- Sistem Limitasi Kuota Harian -->
+            <div class="sidebar-section limit-tracker">
+                <div class="section-header">
+                    <h5><i class="fa-solid fa-chart-pie"></i> Limit Harian</h5>
+                    <span class="limit-status">Aktif</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width: 100%;"></div>
+                </div>
+                <p class="limit-text">Reset otomatis pada pukul 00:00 WIB untuk menghindari degradasi sistem (Flash-Lite).</p>
+            </div>
+
+            <!-- Daftar Modul Aktif -->
+            <div class="sidebar-section modules-list">
+                <h5><i class="fa-solid fa-cubes"></i> Modul Sistem</h5>
+                <ul>
+                    <li class="module-item active"><i class="fa-solid fa-circle-check"></i> Converter Engine</li>
+                    <li class="module-item active"><i class="fa-solid fa-circle-check"></i> Scraper & Media</li>
+                    <li class="module-item active"><i class="fa-solid fa-circle-check"></i> Game Economy</li>
+                    <li class="module-item maintenance"><i class="fa-solid fa-triangle-exclamation"></i> WhatsApp Gateway</li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- AREA CHAT UTAMA -->
+        <section class="chat-viewport">
+            <!-- Feed Percakapan -->
+            <div id="chatFeed" class="chat-feed">
+                
+                <!-- Bubble Chat Sistem (Penyambutan Awal) -->
+                <div class="chat-message message-system">
+                    <div class="message-meta">
+                        <span class="sender-tag">[SYSTEM_EVENT]</span>
+                        <span class="time-tag">13:00</span>
+                    </div>
+                    <div class="message-body">
+                        Selamat datang kembali, Architect **Ahmad Al-Khafidz Badali**! Struktur HTML Just Bot v1.0 Web Dashboard berhasil dimuat. Siap menerima integrasi estetika CSS dari ChatGPT dan fungsi logika JavaScript.
+                    </div>
+                </div>
+
+                <!-- Template Placeholder untuk Bubble User (Untuk referensi CSS) -->
+                <div class="chat-message message-user">
+                    <div class="message-meta">
+                        <span class="sender-tag">Architect (Khafidz)</span>
+                        <span class="time-tag">13:01</span>
+                    </div>
+                    <div class="message-body">
+                        Contoh pesan yang dikirim oleh pengguna ke dalam dashboard.
+                    </div>
+                </div>
+
+                <!-- Template Placeholder untuk Bubble Bot (Untuk referensi CSS) -->
+                <div class="chat-message message-bot">
+                    <div class="message-meta">
+                        <span class="sender-tag">Just Bot v1.0</span>
+                        <span class="time-tag">13:01</span>
+                    </div>
+                    <div class="message-body">
+                        Ini adalah contoh respon balasan dari Just Bot yang diproses menggunakan Grok API.
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Tombol Pintasan Perintah Khusus (Command Quick-Bar) -->
+            <div class="quick-commands-bar">
+                <button class="quick-cmd-btn" title="Ubah Media jadi Stiker">.sticker</button>
+                <button class="quick-cmd-btn" title="Cek Sisa Limit">.limit</button>
+                <button class="quick-cmd-btn" title="Mulai Mini Game">.game</button>
+                <button class="quick-cmd-btn" title="Tampilkan Profil">.remini</button>
+            </div>
+
+            <!-- FOOTER INPUT: Tempat mengetik pesan -->
+            <div class="chat-input-area">
+                <div class="input-wrapper">
+                    <input type="text" id="chatInput" placeholder="Ketik perintah atau tanyakan sesuatu pada Grok...">
+                    <button id="btnSendMessage" class="send-button" title="Kirim Pesan">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>
+
