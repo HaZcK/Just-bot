@@ -1,97 +1,93 @@
-// Just Bot v1.0 - Core Frontend Engine (Grok Integration)
-// Architect: Ahmad Al-Khafidz Badali
+// Just Bot v1.0 - Core Logic Engine (v2.1)
+// Architect: Ahmad Al-Khafidz Badali (Gorontalo)
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. DOM Elements Mapping
-    const btnToggleSettings = document.querySelector('.settings-btn, [class*="settings"]'); 
-    const apiConfigSection = document.querySelector('.api-config, [class*="config"]');
-    const apiKeyInput = document.getElementById('grokApiKeyInput') || document.querySelector('input[type="password"], input[placeholder*="xai"]');
-    const btnSaveKey = document.getElementById('btnSaveKey') || document.querySelector('button[id*="Save"], button[class*="Simpan"]');
-    const chatFeed = document.getElementById('chatFeed') || document.querySelector('.chat-feed, [class*="feed"]');
-    const chatInput = document.getElementById('chatInput') || document.querySelector('input[placeholder*="Ketik"]');
-    const btnSendMessage = document.getElementById('btnSendMessage') || document.querySelector('button[id*="Send"], footer button');
+    // 1. Inisialisasi Elemen DOM
+    const btnToggleSettings = document.getElementById('btnToggleSettings');
+    const apiConfigPanel = document.getElementById('apiConfigPanel');
+    const grokApiKeyInput = document.getElementById('grokApiKeyInput');
+    const btnSaveApi = document.getElementById('btnSaveApi');
+    
+    const chatFeed = document.getElementById('chatFeed');
+    const chatInput = document.getElementById('chatInput');
+    const btnSendMessage = document.getElementById('btnSendMessage');
+    const quickCmdButtons = document.querySelectorAll('.quick-cmd-btn');
 
-    // 2. Load Secured API Key from Local Storage
+    // 2. Load Secured API Key dari Local Storage Browser
     let grokApiKey = localStorage.getItem('grok_api_key') || '';
-    if (grokApiKey && apiKeyInput) {
-        apiKeyInput.value = grokApiKey;
+    if (grokApiKey && grokApiKeyInput) {
+        grokApiKeyInput.value = grokApiKey;
     }
 
-    // 3. Toggle Settings Banner Interaction
-    if (btnToggleSettings && apiConfigSection) {
+    // Toggle Panel API Key
+    if (btnToggleSettings && apiConfigPanel) {
         btnToggleSettings.addEventListener('click', () => {
-            apiConfigSection.classList.toggle('hidden');
+            apiConfigPanel.style.display = apiConfigPanel.style.display === 'none' ? 'block' : 'none';
         });
     }
 
-    // 4. Save API Key Event
-    if (btnSaveKey && apiKeyInput) {
-        btnSaveKey.addEventListener('click', () => {
-            const keyValues = apiKeyInput.value.trim();
-            if (keyValues) {
-                localStorage.setItem('grok_api_key', keyValues);
-                grokApiKey = keyValues;
-                alert('🔑 Grok API Key berhasil disimpan dengan aman di storage browser Anda!');
-                if (apiConfigSection) apiConfigSection.classList.add('hidden');
+    // Fungsi Simpan API Key
+    if (btnSaveApi && grokApiKeyInput) {
+        btnSaveApi.addEventListener('click', () => {
+            const keyValue = grokApiKeyInput.value.trim();
+            if (keyValue) {
+                localStorage.setItem('grok_api_key', keyValue);
+                grokApiKey = keyValue;
+                alert('🔑 Grok API Key berhasil disimpan! Sistem siap digunakan.');
+                if (apiConfigPanel) apiConfigPanel.style.display = 'none';
             } else {
-                alert('⚠️ Harap masukkan API Key yang valid sebelum menyimpan.');
+                alert('⚠️ Harap masukkan API Key x.ai yang valid.');
             }
         });
     }
 
-    // 5. Append Message Element to Chat Feed
-    function appendMessage(sender, text, time = 'Baru saja') {
+    // 3. Fungsi Pembuat Bubble Chat Dinamis
+    function appendBubble(sender, text, type) {
         if (!chatFeed) return;
 
-        const msgWrapper = document.createElement('div');
-        // Deteksi alignment berdasarkan pengirim
-        if (sender.toLowerCase() === 'architect' || sender.toLowerCase() === 'user') {
-            msgWrapper.className = 'flex flex-col items-end space-y-1 mb-4';
-            msgWrapper.innerHTML = `
-                <div class="bg-blue-600 text-white p-3 rounded-xl rounded-tr-none max-w-[85%] text-sm">
-                    <p class="font-bold text-xs text-blue-200 mb-1">Architect (Khafidz) <span class="font-normal opacity-70">${time}</span></p>
-                    <p>${text}</p>
-                </div>
-            `;
-        } else if (sender.toLowerCase() === 'system') {
-            msgWrapper.className = 'flex flex-col items-center mb-4';
-            msgWrapper.innerHTML = `
-                <div class="bg-zinc-900 border border-amber-500/30 text-amber-400 px-4 py-2 rounded-lg text-xs font-mono">
-                    [SYSTEM EVENT]: ${text}
-                </div>
-            `;
-        } else {
-            // Default Just Bot Response
-            msgWrapper.className = 'flex flex-col items-start space-y-1 mb-4';
-            msgWrapper.innerHTML = `
-                <div class="bg-zinc-900 border border-zinc-800 text-zinc-100 p-3 rounded-xl rounded-tl-none max-w-[85%] text-sm">
-                    <p class="font-bold text-xs text-cyan-400 mb-1">Just Bot v1.0 <span class="font-normal text-zinc-500">${time}</span></p>
-                    <p>${text}</p>
-                </div>
-            `;
-        }
+        const now = new Date();
+        const timeString = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
-        chatFeed.appendChild(msgWrapper);
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message message-${type}`;
+
+        let senderTag = 'Just Bot v1.0';
+        if (type === 'user') senderTag = 'Architect (Khafidz)';
+        if (type === 'system') senderTag = '[SYSTEM_EVENT]';
+
+        messageDiv.innerHTML = `
+            <div class="message-meta">
+                <span class="sender-tag">${senderTag}</span>
+                <span class="time-tag">${timeString}</span>
+            </div>
+            <div class="message-body">${text}</div>
+        `;
+
+        chatFeed.appendChild(messageDiv);
+        
+        // Auto-scroll HANYA pada container chatFeed
         chatFeed.scrollTop = chatFeed.scrollHeight;
     }
 
-    // 6. Connect & Fetch Data from X.AI Grok API
-    async function requestGrokAI(promptText) {
+    // 4. Integrasi ke API X.AI (Grok Engine)
+    async function fetchGrokAI(userPrompt) {
         if (!grokApiKey) {
-            appendMessage('System', 'Akses ditolak. Silakan masukkan Grok API Key Anda terlebih dahulu lewat menu pengaturan.');
+            appendBubble('System', 'Akses ditolak. Konfigurasikan API Key Grok Anda terlebih dahulu melalui tombol roda gigi di atas.', 'system');
             return;
         }
 
-        // Buat elemen indikator loading
-        const loadingId = 'loader_' + Date.now();
-        const loadingIndicator = document.createElement('div');
-        loadingIndicator.id = loadingId;
-        loadingIndicator.className = 'text-xs font-mono text-zinc-500 italic mb-4 animate-pulse';
-        loadingIndicator.innerText = ' Just Bot sedang memproses logika via Grok...';
-        if (chatFeed) {
-            chatFeed.appendChild(loadingIndicator);
-            chatFeed.scrollTop = chatFeed.scrollHeight;
-        }
+        // Tampilkan Loading Indicator
+        const loaderId = 'grok_loader_' + Date.now();
+        const loaderDiv = document.createElement('div');
+        loaderDiv.id = loaderId;
+        loaderDiv.className = 'chat-message message-system';
+        loaderDiv.innerHTML = `
+            <div class="message-body" style="color: #64748b; font-style: italic;">
+                <i class="fa-solid fa-spinner fa-spin"></i> Just Bot sedang memproses logika via Grok Engine...
+            </div>
+        `;
+        chatFeed.appendChild(loaderDiv);
+        chatFeed.scrollTop = chatFeed.scrollHeight;
 
         try {
             const response = await fetch('https://api.x.ai/v1/chat/completions', {
@@ -105,61 +101,71 @@ document.addEventListener('DOMContentLoaded', () => {
                     messages: [
                         { 
                             role: 'system', 
-                            content: 'You are Just Bot v1.0, an advanced AI system integrated into a web interface. Your architect is Ahmad Al-Khafidz Badali. Keep your answers logical, sharp, clear, and professional.' 
+                            content: 'You are Just Bot v1.0, an advanced web dashboard AI. Your architect is Ahmad Al-Khafidz Badali. Keep your answers clear, logical, and secure.' 
                         },
-                        { role: 'user', content: promptText }
+                        { role: 'user', content: userPrompt }
                     ]
                 })
             });
 
-            // Hapus loader setelah response didapatkan
-            const targetLoader = document.getElementById(loadingId);
-            if (targetLoader) targetLoader.remove();
+            // Hapus Loading Indicator setelah ada respon
+            const activeLoader = document.getElementById(loaderId);
+            if (activeLoader) activeLoader.remove();
 
             if (!response.ok) {
-                const errPayload = await response.json();
-                appendMessage('System', `API Error: ${errPayload.error?.message || response.statusText}`);
+                const errData = await response.json();
+                appendBubble('System', `API Error: ${errData.error?.message || response.statusText}`, 'system');
                 return;
             }
 
             const data = await response.json();
-            const replyResult = data.choices[0].message.content;
+            const botReply = data.choices[0].message.content;
             
-            const now = new Date();
-            const timeString = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-            appendMessage('Just Bot v1.0', replyResult, timeString);
+            // Tampilkan balasan bot di kiri
+            appendBubble('Just Bot v1.0', botReply, 'bot');
 
         } catch (error) {
-            const targetLoader = document.getElementById(loadingId);
-            if (targetLoader) targetLoader.remove();
-            appendMessage('System', `Gagal terhubung ke server: ${error.message}`);
+            const activeLoader = document.getElementById(loaderId);
+            if (activeLoader) activeLoader.remove();
+            appendBubble('System', `Network Error: ${error.message}`, 'system');
         }
     }
 
-    // 7. Event Handler Kirim Pesan
-    function processUserAction() {
+    // 5. Pengendali Aksi Kirim Pesan (Event Handlers)
+    function handleMessageSubmission() {
         if (!chatInput) return;
-        const textMessage = chatInput.value.trim();
-        if (!textMessage) return;
+        const messageText = chatInput.value.trim();
+        if (!messageText) return;
 
-        const now = new Date();
-        const timeString = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-        // Tampilkan pesan user ke layar
-        appendMessage('Architect', textMessage, timeString);
+        // Cetak bubble user ke kanan
+        appendBubble('Architect (Khafidz)', messageText, 'user');
         chatInput.value = '';
 
-        // Mintai respon ke engine Grok
-        requestGrokAI(textMessage);
+        // Kirim permintaan ke server Grok AI
+        fetchGrokAI(messageText);
     }
 
+    // Eksekusi Klik Tombol Kirim
     if (btnSendMessage) {
-        btnSendMessage.addEventListener('click', processUserAction);
+        btnSendMessage.onclick = handleMessageSubmission;
     }
+
+    // Eksekusi Tombol Enter pada Keyboard/Tablet
     if (chatInput) {
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') processUserAction();
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                handleMessageSubmission();
+            }
         });
     }
+
+    // Klik Otomatis Quick Command
+    quickCmdButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (chatInput) {
+                chatInput.value = btn.innerText;
+                chatInput.focus();
+            }
+        });
+    });
 });
-      
