@@ -1,4 +1,6 @@
-// Just Bot v1.0 - Core Logic Engine (v2.6 Full Structure)
+// Just Bot v1.0 - Core Logic Engine (v2.7 Debugged)
+// Architect: Ahmad Al-Khafidz Badali (Gorontalo)
+
 document.addEventListener('DOMContentLoaded', () => {
     const btnToggleSettings = document.getElementById('btnToggleSettings');
     const apiConfigPanel = document.getElementById('apiConfigPanel');
@@ -10,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnSendMessage = document.getElementById('btnSendMessage');
     const quickCmdButtons = document.querySelectorAll('.quick-cmd');
 
+    // Load API Key dari Local Storage
     let grokApiKey = localStorage.getItem('grok_api_key') || '';
     if (grokApiKey && grokApiKeyInput) {
         grokApiKeyInput.value = grokApiKey;
@@ -88,9 +91,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const activeTyping = document.getElementById(typingId);
             if (activeTyping) activeTyping.remove();
 
+            // Kunci Perbaikan: Deteksi Eror yang Lebih Kuat
             if (!response.ok) {
-                const errData = await response.json();
-                appendBubble(`API Error: ${errData.error?.message || response.statusText}`, 'bot');
+                let errorDetails = '';
+                try {
+                    const errData = await response.json();
+                    errorDetails = errData.error?.message || JSON.stringify(errData);
+                } catch (e) {
+                    errorDetails = `Status HTTP ${response.status} (${response.statusText})`;
+                }
+                appendBubble(`API Error: ${errorDetails}`, 'bot');
                 return;
             }
 
@@ -100,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             const activeTyping = document.getElementById(typingId);
             if (activeTyping) activeTyping.remove();
-            appendBubble(`Network Error: ${error.message}`, 'bot');
+            appendBubble(`Network Error (Bisa jadi masalah CORS browser): ${error.message}`, 'bot');
         }
     }
 
