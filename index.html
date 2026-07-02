@@ -1,12 +1,12 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Just Bot v1.0 - Web Dashboard</title>
-    <!-- Font Awesome Icon Library (Untuk estetika ikon menu) -->
+    <!-- Font Awesome Icon Library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Link ke file CSS buatan ChatGPT -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="justbot-app">
@@ -30,8 +30,8 @@
         </div>
     </header>
 
-    <!-- 2. PANEL KONFIGURASI API (Default Tersembunyi) -->
-    <section id="apiConfigPanel" class="config-panel">
+    <!-- 2. PANEL KONFIGURASI API (Default Tersembunyi via CSS/JS) -->
+    <section id="apiConfigPanel" class="config-panel" style="display: none;">
         <div class="config-wrapper">
             <h3 class="panel-title"><i class="fa-solid fa-key"></i> X.AI Grok API Configuration</h3>
             <p class="panel-desc">Gunakan API Key Grok Anda untuk menghidupkan kecerdasan buatan Just Bot v1.0.</p>
@@ -43,12 +43,12 @@
         </div>
     </section>
 
-    <!-- 3. AREA UTAMA (TAMPILAN TERBELAH: SIDEBAR & CHAT) -->
+    <!-- 3. AREA UTAMA -->
     <main class="main-workspace">
         
-        <!-- SIDEBAR: STATISTIK & MODUL STATUS (Untuk memantau bot) -->
+        <!-- SIDEBAR: STATISTIK & MODUL STATUS -->
         <aside class="sidebar-info">
-            <!-- Profil Bot & Sertifikat Lampiran -->
+            <!-- Profil Bot & Sertifikat -->
             <div class="sidebar-section profile-card">
                 <div class="bot-avatar">
                     <i class="fa-solid fa-robot"></i>
@@ -100,31 +100,31 @@
                     </div>
                 </div>
 
-                <!-- Template Placeholder untuk Bubble User (Untuk referensi CSS) -->
-                <div class="chat-message message-user">
-                    <div class="message-meta">
-                        <span class="sender-tag">Architect (Khafidz)</span>
-                        <span class="time-tag">13:01</span>
-                    </div>
-                    <div class="message-body">
-                        Contoh pesan yang dikirim oleh pengguna ke dalam dashboard.
-                    </div>
-                </div>
-
-                <!-- Template Placeholder untuk Bubble Bot (Untuk referensi CSS) -->
+                <!-- Template Bubble Bot (Kiri) -->
                 <div class="chat-message message-bot">
                     <div class="message-meta">
                         <span class="sender-tag">Just Bot v1.0</span>
                         <span class="time-tag">13:01</span>
                     </div>
                     <div class="message-body">
-                        Ini adalah contoh respon balasan dari Just Bot yang diproses menggunakan Grok API.
+                        Ini adalah contoh respon balasan dari Just Bot yang diproses menggunakan Grok API. (Kiri)
+                    </div>
+                </div>
+
+                <!-- Template Bubble User (Kanan) -->
+                <div class="chat-message message-user">
+                    <div class="message-meta">
+                        <span class="sender-tag">Architect (Khafidz)</span>
+                        <span class="time-tag">13:01</span>
+                    </div>
+                    <div class="message-body">
+                        Contoh pesan yang dikirim oleh pengguna ke dalam dashboard. (Kanan)
                     </div>
                 </div>
 
             </div>
 
-            <!-- Tombol Pintasan Perintah Khusus (Command Quick-Bar) -->
+            <!-- Tombol Pintasan Perintah Khusus -->
             <div class="quick-commands-bar">
                 <button class="quick-cmd-btn" title="Ubah Media jadi Stiker">.sticker</button>
                 <button class="quick-cmd-btn" title="Cek Sisa Limit">.limit</button>
@@ -132,7 +132,7 @@
                 <button class="quick-cmd-btn" title="Tampilkan Profil">.remini</button>
             </div>
 
-            <!-- FOOTER INPUT: Tempat mengetik pesan -->
+            <!-- FOOTER INPUT PERMANEN -->
             <div class="chat-input-area">
                 <div class="input-wrapper">
                     <input type="text" id="chatInput" placeholder="Ketik perintah atau tanyakan sesuatu pada Grok...">
@@ -144,7 +144,8 @@
         </section>
 
     </main>
-        <script src="script.js"></script>
+
+    <!-- Script Utama dari Gemini -->
+    <script src="script.js"></script>
 </body>
 </html>
-
