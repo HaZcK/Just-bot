@@ -274,3 +274,232 @@ backdrop-filter:blur(20px);
 flex-shrink:0;
 
 }
+
+/* ===================================
+   CHAT FEED
+=================================== */
+
+.chat-feed{
+
+flex:1;
+
+overflow-y:auto;
+overflow-x:hidden;
+
+padding:30px;
+
+display:flex;
+flex-direction:column;
+gap:18px;
+
+scroll-behavior:smooth;
+
+}
+
+/* Bubble */
+
+.bubble{
+
+max-width:75%;
+
+padding:15px 18px;
+
+border-radius:18px;
+
+font-size:15px;
+
+line-height:1.7;
+
+word-wrap:break-word;
+
+box-shadow:0 10px 25px rgba(0,0,0,.25);
+
+animation:messageIn .28s ease;
+
+position:relative;
+
+}
+
+/* User */
+
+.user-bubble{
+
+align-self:flex-end;
+
+background:
+linear-gradient(135deg,
+var(--primary),
+#2563eb);
+
+color:white;
+
+border-bottom-right-radius:6px;
+
+}
+
+/* Bot */
+
+.bot-bubble{
+
+align-self:flex-start;
+
+background:#1c2737;
+
+border:1px solid rgba(255,255,255,.06);
+
+color:#eef3ff;
+
+border-bottom-left-radius:6px;
+
+}
+
+/* Bubble Hover */
+
+.bubble:hover{
+
+transform:translateY(-2px);
+
+transition:.25s;
+
+}
+
+/* Time */
+
+.bubble small{
+
+display:block;
+
+margin-top:8px;
+
+font-size:11px;
+
+opacity:.65;
+
+}
+
+/* Typing Bubble */
+
+.typing{
+
+display:flex;
+
+align-items:center;
+
+gap:6px;
+
+width:70px;
+
+height:42px;
+
+padding:12px 16px;
+
+}
+
+.typing span{
+
+width:8px;
+height:8px;
+
+border-radius:50%;
+
+background:#9fb8ff;
+
+animation:typing 1s infinite;
+
+}
+
+.typing span:nth-child(2){
+
+animation-delay:.2s;
+
+}
+
+.typing span:nth-child(3){
+
+animation-delay:.4s;
+
+}
+
+/* Animasi Bubble */
+
+@keyframes messageIn{
+
+from{
+
+opacity:0;
+
+transform:translateY(18px) scale(.96);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0) scale(1);
+
+}
+
+}
+
+@keyframes typing{
+
+0%{
+
+transform:translateY(0);
+
+opacity:.3;
+
+}
+
+50%{
+
+transform:translateY(-5px);
+
+opacity:1;
+
+}
+
+100%{
+
+transform:translateY(0);
+
+opacity:.3;
+
+}
+
+}
+
+/* Empty Chat */
+
+.chat-feed:empty::before{
+
+content:"👋 Selamat datang di Just Bot v2.\A Mulailah percakapan dengan mengetik pesan di bawah.";
+
+white-space:pre-line;
+
+margin:auto;
+
+text-align:center;
+
+font-size:17px;
+
+color:var(--text2);
+
+opacity:.7;
+
+}
+
+/* Fade Scroll */
+
+.chat-feed{
+
+mask-image:
+linear-gradient(
+to bottom,
+transparent,
+black 20px,
+black calc(100% - 20px),
+transparent);
+
+}
